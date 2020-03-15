@@ -24,10 +24,7 @@ function isFileExisted(fileName) {
     });
 }
 
-async function test(){
-    let x = await loadUser('a','b')
-    console.log(x)
-}
+
 async function loadUser(account, pwd) {
     let result = {};
     let isExisted = await isFileExisted(DATADIR + account + '.json');

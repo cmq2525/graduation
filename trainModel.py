@@ -33,7 +33,11 @@ def load_model(file_name='model.pkl'):
         return {}
 def upload_file(file_name):
     output = subprocess.getoutput(['ipfs add ' + file_name])
+    print(output.split())
     addr = output.split()[-8]
+    #上传过程中可能会出现进度条，这样倒数第八个对应的信息就是文件名，倒数第九个是ipfs地址
+    if('.' in addr):
+        addr = output.split()[-9]
     return addr
 def download_file(addr):
     subprocess.getoutput(['ipfs get ' + addr])
@@ -45,7 +49,7 @@ def get_server():
     def train_and_upload():
         #获取到传入url中参数id对应的值
         data_name = request.args.get('data')
-        data_addr = upload_file(data_name);
+        data_addr = upload_file(data_name)
         if(data_addr in model_dict):
             return jsonify({})
         clf = train_model(data_name)

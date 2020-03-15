@@ -1,0 +1,34 @@
+{
+  "name": "my_dapp",
+  "version": "1.0.0",
+  "description": "data trading platform",
+  "main": "./my_server.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express-formidable": "^1.2.0",
+    "ml-dataset-iris": "^1.1.1",
+    "ml-random-forest": "^2.0.1",
+    "node-rsa": "^1.0.7",
+    "web3": "^1.2.4"
+  },
+  "bin": "./my_server.js",
+  "pkg": {
+    "script": [
+      "./Encrypt.js",
+      "./router.js",
+      "./Platform.js",
+      "./utils.js"
+    ],
+    "assets": [
+      "data/zero.json",
+      "dist/**/*"
+    ]
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node my-server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
