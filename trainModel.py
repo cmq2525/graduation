@@ -1,7 +1,6 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
-import pandas as pd
-import numpy as np
+from numpy import loadtxt
 import pickle
 import os
 
@@ -10,14 +9,14 @@ import threading
 from flask import Flask, request,make_response, jsonify
 
 def train_model(file_name):
-    dataset = pd.read_csv(file_name)
-    train_data, train_label = dataset.values[:,:-1], dataset.values[:,-1]
+    dataset = loadtxt(file_name,dtype='str',delimiter=',')
+    train_data, train_label = dataset[1:,:-1], dataset[1:,-1]
     clf = RandomForestClassifier()
     clf.fit(train_data,train_label)
     return clf
 def test_model(file_name,clf):
-    dataset = pd.read_csv(file_name)
-    test_data,test_label = dataset.values[:,:-1],dataset.values[:,-1]
+    dataset = loadtxt(file_name,dtype='str',delimiter=',')
+    test_data,test_label = dataset[1:,:-1],dataset[1:,-1]
     pred = clf.predict(test_data)
     return classification_report(test_label,pred)
 def save_model(clf,file_name='model.pkl'):
@@ -33,11 +32,13 @@ def load_model(file_name='model.pkl'):
         return {}
 def upload_file(file_name):
     output = subprocess.getoutput(['ipfs add ' + file_name])
-    print(output.split())
+    #print(output.split())
     addr = output.split()[-8]
     #上传过程中可能会出现进度条，这样倒数第八个对应的信息就是文件名，倒数第九个是ipfs地址
     if('.' in addr):
         addr = output.split()[-9]
+    
+    print('upload successful at: ',addr)
     return addr
 def download_file(addr):
     subprocess.getoutput(['ipfs get ' + addr])
